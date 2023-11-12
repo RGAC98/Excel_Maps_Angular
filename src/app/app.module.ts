@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 
 //import de modulos google maps
 import {AgmCoreModule} from '@agm/core';
-import {AgmDirectionModule} from 'agm-direction';
 
 @NgModule({
   declarations: [
@@ -17,8 +16,7 @@ import {AgmDirectionModule} from 'agm-direction';
     AppRoutingModule,
     AgmCoreModule.forRoot({
       apiKey: ''
-    }),
-    AgmDirectionModule
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]
