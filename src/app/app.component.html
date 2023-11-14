@@ -35,6 +35,10 @@
           <br><br>
 
           <div *ngIf="coords.length > 0" style="overflow-y: scroll; height:400px;">
+            <div class="center">
+              <button (click)="cambiarOrigen()">Cambiar punto de origen</button>
+            </div>
+            <br>
             <table class="table">
               <thead>
                 <th scope="col">ID</th>

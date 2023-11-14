@@ -21,12 +21,13 @@ export class AppComponent implements OnInit
   mapa:boolean = false;
   map:any;
 
+  c_origen:boolean = false;
   distancia:number = 0;
   tiempo:number = 0;
   ruta:any;
 
-  cp_lat = 0.34101763889455033;
-  cp_lng = -78.12070270845703;
+  lat:number = 0.34101763889455033;
+  lng:number = -78.12070270845703;
   
   constructor()
   {}
@@ -40,7 +41,7 @@ export class AppComponent implements OnInit
   {
     //configuración del mapa
     this.map = L.map('map', {
-      center: [this.cp_lat, this.cp_lng],
+      center: [this.lat, this.lng],
       attributionControl: false,
       zoom: 14
     });
@@ -65,7 +66,18 @@ export class AppComponent implements OnInit
 
     tiles.addTo(this.map);
 
-    L.marker([this.cp_lat, this.cp_lng]).bindPopup('Casa plus').addTo(this.map).openPopup();
+    L.marker([this.lat, this.lng]).bindPopup('Casa plus').addTo(this.map).openPopup().addEventListener('click', () => {
+      if(this.c_origen == false)
+      {
+        this.dibujarRutas(this.lat, this.lng);
+      }else
+      {
+        this.lat = 0.34101763889455033;
+        this.lng = -78.12070270845703;
+        this.c_origen = false;
+        alert('Punto de origen actualizado');
+      }
+    });
   }
 
   ReadExcel(event:any)
@@ -97,7 +109,16 @@ export class AppComponent implements OnInit
       this.coords.push(coord);
       
       L.marker([coord.lat, coord.lng]).bindPopup(`${coord.ticket} - ${coord.cli}`).addTo(this.map).addEventListener('click', () => {
-        this.dibujarRutas(coord.lat, coord.lng);
+        if(this.c_origen == false)
+        {
+          this.dibujarRutas(coord.lat, coord.lng);
+        }else
+        {
+          this.lat = coord.lat;
+          this.lng = coord.lng;
+          this.c_origen = false;
+          alert('Punto de origen actualizado');
+        }
       });
     }
   }
@@ -105,6 +126,12 @@ export class AppComponent implements OnInit
   generarMapa()
   {
     this.extraerCoordenadas();
+  }
+
+  cambiarOrigen()
+  {
+    this.c_origen = true;
+    alert('Selecciona el nuevo punto de origen');
   }
 
   dibujarRutas(lat:number, lng:number)
@@ -125,7 +152,7 @@ export class AppComponent implements OnInit
       show: false,
       routeWhileDragging: true,
       waypoints: [
-        L.latLng(this.cp_lat, this.cp_lng),
+        L.latLng(this.lat, this.lng),
         L.latLng(lat, lng),
       ]
     })
